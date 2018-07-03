@@ -14,9 +14,10 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/view_margin"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/imageview_description"
         android:scaleType="fitStart" />
 
@@ -57,7 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text=""
+        android:layout_marginStart="32dp"
         android:textColor="#FFFFFF"
+        android:elevation="50dp"
         android:layout_marginTop="5dp"
         android:layout_below="@id/image_view"
         android:id="@+id/tv_smile"/>
@@ -67,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_below="@id/tv_smile"
+        android:elevation="50dp"
+        android:layout_marginStart="32dp"
         android:text=""
         android:textColor="#FFFFFF"
         android:id="@+id/tv_right_eye"/>
@@ -74,7 +79,9 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:elevation="50dp"
         android:layout_marginTop="5dp"
+        android:layout_marginStart="32dp"
         android:layout_below="@id/tv_right_eye"
         android:text=""
         android:textColor="#FFFFFF"
