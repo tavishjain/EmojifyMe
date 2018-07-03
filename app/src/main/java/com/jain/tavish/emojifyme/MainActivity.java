@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String FILE_PROVIDER_AUTHORITY = "com.jain.tavish.fileprovider";
 
+
+    private RelativeLayout relativeLayout;
     private ImageView mImageView;
 
     private Button mEmojifyButton;
@@ -37,9 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mSaveFab;
     private FloatingActionButton mClearFab;
 
-    public static TextView mTitleTextView, mSmileTextView, mRightEyeTextView, mLeftEyeTextView;
+    private TextView mTitleTextView;
 
     private String mTempPhotoPath;
+    private TextView smileTextView;
+    private TextView leftEyeTextView;
+    private TextView rightEyeTextView;
 
     private Bitmap mResultsBitmap;
 
@@ -52,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
         // Bind the views
         mImageView = (ImageView) findViewById(R.id.image_view);
         mEmojifyButton = (Button) findViewById(R.id.emojify_button);
+        relativeLayout = findViewById(R.id.activity_main);
         mShareFab = (FloatingActionButton) findViewById(R.id.share_button);
         mSaveFab = (FloatingActionButton) findViewById(R.id.save_button);
         mClearFab = (FloatingActionButton) findViewById(R.id.clear_button);
         mTitleTextView = (TextView) findViewById(R.id.title_text_view);
 
-        mSmileTextView = findViewById(R.id.tv_smile);
-        mRightEyeTextView = findViewById(R.id.tv_right_eye);
-        mLeftEyeTextView = findViewById(R.id.tv_left_eye);
+        smileTextView = findViewById(R.id.tv_smile);
+        leftEyeTextView = findViewById(R.id.tv_left_eye);
+        rightEyeTextView = findViewById(R.id.tv_right_eye);
     }
 
     /**
@@ -166,15 +174,16 @@ public class MainActivity extends AppCompatActivity {
         mShareFab.setVisibility(View.VISIBLE);
         mClearFab.setVisibility(View.VISIBLE);
 
-        mSmileTextView.setVisibility(View.VISIBLE);
-        mRightEyeTextView.setVisibility(View.VISIBLE);
-        mLeftEyeTextView.setVisibility(View.VISIBLE);
+        smileTextView.setVisibility(View.VISIBLE);
+        rightEyeTextView.setVisibility(View.VISIBLE);
+        leftEyeTextView.setVisibility(View.VISIBLE);
 
         // Resample the saved image to fit the ImageView
         mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
 
-        // Detect the faces
-        Emojifier.detectFaces(this, mResultsBitmap);
+
+        // Detect the faces and overlay the appropriate emoji
+        mResultsBitmap = Emojifier.detectFacesandOverlayEmoji(this, mResultsBitmap);
 
         // Set the new bitmap to the ImageView
         mImageView.setImageBitmap(mResultsBitmap);
@@ -224,15 +233,16 @@ public class MainActivity extends AppCompatActivity {
         mSaveFab.setVisibility(View.GONE);
         mClearFab.setVisibility(View.GONE);
 
-        mSmileTextView.setVisibility(View.GONE);
-        mRightEyeTextView.setVisibility(View.GONE);
-        mLeftEyeTextView.setVisibility(View.GONE);
+        smileTextView.setVisibility(View.GONE);
+        leftEyeTextView.setVisibility(View.GONE);
+        rightEyeTextView.setVisibility(View.GONE);
 
         // Delete the temporary image file
         BitmapUtils.deleteImageFile(this, mTempPhotoPath);
     }
 
     boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -241,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
+        Snackbar snackbar = Snackbar.make(relativeLayout ,"Press back button again to exit" , Snackbar.LENGTH_SHORT);
+        snackbar.show();
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -251,5 +261,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000);
     }
-
 }
